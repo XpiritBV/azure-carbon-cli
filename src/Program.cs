@@ -2,6 +2,7 @@
 using AzureCostCli.Commands;
 using AzureCostCli.Commands.AccumulatedCost;
 using AzureCostCli.Commands.Budgets;
+using AzureCostCli.Commands.CarbonByResource;
 using AzureCostCli.Commands.CostByResource;
 using AzureCostCli.Commands.CostByTag;
 using AzureCostCli.Commands.DailyCost;
@@ -42,6 +43,7 @@ registrations.AddHttpClient("RegionsApi", client =>
 registrations.AddTransient<ICostRetriever, AzureCostApiRetriever>();
 registrations.AddTransient<IPriceRetriever, AzurePriceRetriever>();
 registrations.AddTransient<IRegionsRetriever, AzureRegionsRetriever>();
+registrations.AddTransient<ICarbonRetriever, AzureCarbonRetriever>();
 
 var registrar = new TypeRegistrar(registrations);
 
@@ -71,7 +73,10 @@ app.Configure(config =>
   config.PropagateExceptions();
 #endif
 
-  config.AddCommand<AccumulatedCostCommand>("accumulatedCost")
+    config.AddCommand<CarbonByResourceCommand>("carbonByResource")
+        .WithDescription("Show the carbon details by resource.");
+
+    config.AddCommand<AccumulatedCostCommand>("accumulatedCost")
       .WithDescription("Show the accumulated cost details.");
   
   config.AddCommand<DailyCostCommand>("dailyCosts")
